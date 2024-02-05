@@ -1,0 +1,34 @@
+{
+  "name": "bookmark",
+  "version": "1.0.0",
+  "description": "A backend to process and store the bookmarks",
+  "main": "index.ts",
+  "scripts": {
+    "test": "test",
+    "build": "npx tsc",
+    "start": "node build/index.js",
+    "dev": "nodemon src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arther/bookmark-be.git"
+  },
+  "author": "Arther",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arther/bookmark-be/issues"
+  },
+  "homepage": "https://github.com/arther/bookmark-be#readme",
+  "dependencies": {
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "tesseract.js": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.16",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
