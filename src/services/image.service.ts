@@ -6,6 +6,7 @@ import {v4 as uuidv4} from 'uuid';
 import {saveBookmarks} from "./bookmark.service";
 import {Bookmarks} from "../domain/bookmarks.domain";
 
+// Todo: optimise the worker utilisation
 export const extractText = async (req: Request, res: Response) => {
     if (req.file?.path) {
         const worker = await createWorker('eng');
