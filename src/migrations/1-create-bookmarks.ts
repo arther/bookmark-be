@@ -1,10 +1,10 @@
-import {collectionName} from "../domain/bookmarks.domain";
+import {bookmarksCollectionName} from "../domain/bookmarks.domain";
 import {CollectionCreateSchema} from "typesense/lib/Typesense/Collections";
 
 export const up = async (context: any) => {
     const ctx = context.context;
     const bookmarksSchema = {
-        'name': collectionName,
+        'name': bookmarksCollectionName,
         'fields': [
             {'name': 'id', 'type': 'string'},
             {'name': 'book', 'type': 'string', 'facet': true},
@@ -20,7 +20,7 @@ export const up = async (context: any) => {
 export const down = async (context: any) => {
     try {
         const ctx = context.context;
-        await ctx.client.collections(collectionName).delete();
+        await ctx.client.collections(bookmarksCollectionName).delete();
     } catch (err) {
         console.error(err);
     }

@@ -1,4 +1,4 @@
-import {collectionName} from "../domain/bookmarks.domain";
+import {bookmarksCollectionName} from "../domain/bookmarks.domain";
 import {CollectionCreateSchema} from "typesense/lib/Typesense/Collections";
 
 export const up = async (context: any) => {
@@ -20,7 +20,7 @@ export const up = async (context: any) => {
             }
         ]
     };
-    await ctx.client.collections(collectionName).update(bookmarksSchema);
+    await ctx.client.collections(bookmarksCollectionName).update(bookmarksSchema);
 }
 
 export const down = async (context: any) => {
@@ -30,5 +30,5 @@ export const down = async (context: any) => {
             {'name': 'embedding', 'drop': true}
         ]
     };
-    await ctx.client.collections(collectionName).update(bookmarksSchema);
+    await ctx.client.collections(bookmarksCollectionName).update(bookmarksSchema);
 }

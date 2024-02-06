@@ -8,4 +8,4 @@ export interface Bookmarks {
     tags: string[],
 }
 
-export const collectionName = 'bookmarks';
+export const bookmarksCollectionName = 'bookmarks';
