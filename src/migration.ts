@@ -8,7 +8,7 @@ const createClient = () => new Typesense.Client({
         'protocol': 'http'
     }],
     'apiKey': process.env.TYPESENSE_API_KEY || "",
-    'connectionTimeoutSeconds': 2
+    'connectionTimeoutSeconds': 5
 });
 
 const umzug = new Umzug({

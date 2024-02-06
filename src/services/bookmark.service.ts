@@ -8,3 +8,7 @@ export const saveBookmarks = async (bookmark: Bookmarks) => {
         return_id: true,
     });
 }
+
+export const searchBookmarks = async (query: string) => {
+
+}
