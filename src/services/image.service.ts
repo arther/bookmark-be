@@ -21,7 +21,8 @@ export const extractText = async (req: Request, res: Response) => {
             keywords: keywords1,
             bookmark_path: req.file.path,
             authors: req.body.authors,
-            content: content
+            content: content,
+            tags: req.body.tags,
         } as Bookmarks;
         console.log("Bookmark constructed");
         res.status(200).json(await saveBookmarks(bookmarks));
@@ -30,7 +31,7 @@ export const extractText = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({
-        message: "Image processes successfully",
+        message: "Image processing failed. Try later.",
         success: false,
     });
 };

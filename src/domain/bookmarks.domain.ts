@@ -4,7 +4,8 @@ export interface Bookmarks {
     keywords: string[],
     bookmark_path: string,
     authors: string[],
-    content: string
+    content: string,
+    tags: string[],
 }
 
 export const collectionName = 'bookmarks';
