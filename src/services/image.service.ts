@@ -6,19 +6,23 @@ import {v4 as uuidv4} from 'uuid';
 import {saveBookmarks} from "./bookmark.service";
 import {Bookmarks} from "../domain/bookmarks.domain";
 
+function cleanUp(text: string) {
+    return text.replace(/\n/g, " ");
+}
+
 // Todo: optimise the worker utilisation
 export const extractText = async (req: Request, res: Response) => {
     if (req.file?.path) {
         const worker = await createWorker('eng');
         const ret = await worker.recognize(req.file?.path || "Nothing");
         await worker.terminate();
-        let content = ret.data.text as string;
-        let keywords1 = extractKeywords(content);
+        let content = cleanUp(ret.data.text as string);
+        let extract = extractKeywords(content);
         console.log("Keyworks extracted");
         const bookmarks = {
             id: uuidv4().toString(),
             book: req.body.book as string,
-            keywords: keywords1,
+            keywords: extract,
             bookmark_path: req.file.path,
             authors: req.body.authors,
             content: content,
