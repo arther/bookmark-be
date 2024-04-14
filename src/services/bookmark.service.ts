@@ -1,6 +1,6 @@
-import {client} from "./typesense.service";
-import {Bookmarks, bookmarksCollectionName} from "../domain/bookmarks.domain";
-import {Request, Response} from "express";
+import { client } from "./typesense.service";
+import { Bookmarks, bookmarksCollectionName } from "../domain/bookmarks.domain";
+import { Request, Response } from "express";
 
 export const saveBookmarks = async (bookmark: Bookmarks) => {
     return client.collections(bookmarksCollectionName).documents().import([bookmark], {
@@ -16,7 +16,7 @@ export const searchBookmarks = async (req: Request, res: Response) => {
         q: req.query.key as string,
         query_by: 'embedding, tags, keywords',
         exclude_fields: 'embedding',
-        vector_query : 'embedding:([], alpha:0.1, distance_threshold:0.70)',
+        vector_query: 'embedding:([], alpha:0.1, distance_threshold:0.70)',
     }
 
     console.log(`Query`, query)

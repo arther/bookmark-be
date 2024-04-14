@@ -1,5 +1,5 @@
-import {Router} from "express";
-import {extractText, uploadImg} from "../services/image.service";
+import { Router } from "express";
+import { extractText, uploadImg } from "../services/image.service";
 
 const imageRouter = Router()
 
