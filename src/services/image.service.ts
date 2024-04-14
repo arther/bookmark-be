@@ -11,6 +11,7 @@ function cleanUp(text: string) {
 }
 
 // Todo: optimise the worker utilisation
+// Todo: Make this a job queue and process image files async
 export const extractText = async (req: Request, res: Response) => {
     if (req.file?.path) {
         const worker = await createWorker('eng');
@@ -18,7 +19,6 @@ export const extractText = async (req: Request, res: Response) => {
         await worker.terminate();
         let content = cleanUp(ret.data.text as string);
         let extract = extractKeywords(content);
-        console.log("Keyworks extracted");
         const bookmarks = {
             id: uuidv4().toString(),
             book: req.body.book as string,
@@ -28,7 +28,6 @@ export const extractText = async (req: Request, res: Response) => {
             content: content,
             tags: req.body.tags,
         } as Bookmarks;
-        console.log("Bookmark constructed");
         res.status(200).json(await saveBookmarks(bookmarks));
         console.log("Bookmark saved");
         return;
