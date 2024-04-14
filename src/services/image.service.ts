@@ -17,8 +17,10 @@ export const extractText = async (req: Request, res: Response) => {
         const worker = await createWorker('eng');
         const ret = await worker.recognize(req.file?.path || "Nothing");
         await worker.terminate();
+        console.log("Text extracted");
         let content = cleanUp(ret.data.text as string);
         let extract = extractKeywords(content);
+        console.log("Keywords extracted");
         const bookmarks = {
             id: uuidv4().toString(),
             book: req.body.book as string,

@@ -3,7 +3,7 @@ import Typesense from "typesense";
 
 const createClient = () => new Typesense.Client({
     'nodes': [{
-        'host': 'localhost',
+        'host': process.env.TYPESENSE_HOST || 'localhost',
         'port': 8108,
         'protocol': 'http'
     }],
