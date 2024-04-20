@@ -15,4 +15,11 @@ Currently we are migrating from typesense to mongodb as mongo atlas supports vec
 Next Step:
 1. Create embedding service and store the embeddings in mongo db
 ref: https://js.langchain.com/docs/integrations/text_embedding/llama_cpp
-2. Store images in S3
+2. Make search endpoint use mongo vector search capabilities
+3. Store images in S3
+
+Features:
+1. User authentication using google oAuth
+2. Create books for a user
+3. Add bookmarks to a book
+4. Search bookmarks specific to a book
