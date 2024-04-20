@@ -7,3 +7,12 @@ We can take photos while reading physical books - but unable to search, do text 
 2. tesseract.js to extract text, keywords, topics out of the image;
 3. Tagging on top of plain text context and store them in typesense (built for search);
 4. Search with relevant words/topics and find the pages
+
+
+Development Stages:
+Currently we are migrating from typesense to mongodb as mongo atlas supports vector search.
+1. Storing scanned doc content in mongo is done
+Next Step:
+1. Create embedding service and store the embeddings in mongo db
+ref: https://js.langchain.com/docs/integrations/text_embedding/llama_cpp
+2. Store images in S3

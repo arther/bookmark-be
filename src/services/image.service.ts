@@ -17,8 +17,7 @@ export const extractText = async (req: Request, res: Response) => {
         const worker = await createWorker('eng');
         const extractedText = await extractTextFromImage(worker, req.file.path);
         const cleanedText = cleanUp(extractedText);
-        const keywords = extractKeywords(cleanedText);
-        const bookmarks = createBookmarks(req, cleanedText, keywords);
+        const bookmarks = createBookmarks(req, cleanedText);
         const savedBookmarks = await saveBookmarks(bookmarks);
         res.status(200).json(savedBookmarks);
         return;
@@ -37,11 +36,10 @@ const extractTextFromImage = async (worker: Tesseract.Worker, imagePath: string)
     return result.data.text as string;
 }
 
-const createBookmarks = (req: Request, content: string, keywords: string[]): Bookmarks => {
+const createBookmarks = (req: Request, content: string): Bookmarks => {
     return {
         id: uuidv4().toString(),
         book: req.body.book as string,
-        keywords: keywords,
         bookmark_path: req.file?.path || "",
         authors: req.body.authors,
         content: content,
