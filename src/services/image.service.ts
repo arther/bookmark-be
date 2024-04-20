@@ -1,10 +1,10 @@
-import {createWorker} from 'tesseract.js';
-import {Request, Response} from "express";
+import { createWorker } from 'tesseract.js';
+import { Request, Response } from "express";
 import multer from "multer";
-import {extractKeywords} from "./text.service";
-import {v4 as uuidv4} from 'uuid';
-import {saveBookmarks} from "./bookmark.service";
-import {Bookmarks} from "../domain/bookmarks.domain";
+import { extractKeywords } from "./text.service";
+import { v4 as uuidv4 } from 'uuid';
+import { saveBookmarks } from "./bookmark.service";
+import { Bookmarks } from "../domain/bookmarks.domain";
 
 function cleanUp(text: string) {
     return text.replace(/\n/g, " ");
@@ -15,23 +15,12 @@ function cleanUp(text: string) {
 export const extractText = async (req: Request, res: Response) => {
     if (req.file?.path) {
         const worker = await createWorker('eng');
-        const ret = await worker.recognize(req.file?.path || "Nothing");
-        await worker.terminate();
-        console.log("Text extracted");
-        let content = cleanUp(ret.data.text as string);
-        let extract = extractKeywords(content);
-        console.log("Keywords extracted");
-        const bookmarks = {
-            id: uuidv4().toString(),
-            book: req.body.book as string,
-            keywords: extract,
-            bookmark_path: req.file.path,
-            authors: req.body.authors,
-            content: content,
-            tags: req.body.tags,
-        } as Bookmarks;
-        res.status(200).json(await saveBookmarks(bookmarks));
-        console.log("Bookmark saved");
+        const extractedText = await extractTextFromImage(worker, req.file.path);
+        const cleanedText = cleanUp(extractedText);
+        const keywords = extractKeywords(cleanedText);
+        const bookmarks = createBookmarks(req, cleanedText, keywords);
+        const savedBookmarks = await saveBookmarks(bookmarks);
+        res.status(200).json(savedBookmarks);
         return;
     }
 
@@ -41,16 +30,35 @@ export const extractText = async (req: Request, res: Response) => {
     });
 };
 
+const extractTextFromImage = async (worker: Tesseract.Worker, imagePath: string): Promise<string> => {
+    const result = await worker.recognize(imagePath || "Nothing");
+    await worker.terminate();
+    console.log("Text extracted");
+    return result.data.text as string;
+}
+
+const createBookmarks = (req: Request, content: string, keywords: string[]): Bookmarks => {
+    return {
+        id: uuidv4().toString(),
+        book: req.body.book as string,
+        keywords: keywords,
+        bookmark_path: req.file?.path || "",
+        authors: req.body.authors,
+        content: content,
+        tags: req.body.tags,
+    };
+}
+
 let imageStoragePath = process.cwd() + "/images";
 console.log(`Image storage path: ${imageStoragePath}`)
 const storageEngine = multer.diskStorage({
     destination: imageStoragePath,
     filename: (req: Request,
-               file: Express.Multer.File,
-               callback: (error: Error | null, filename: string) => void) => {
+        file: Express.Multer.File,
+        callback: (error: Error | null, filename: string) => void) => {
         console.log("image name", file.originalname);
         callback(null, file.originalname);
     }
 });
 
-export const uploadImg = multer({storage: storageEngine}).single('image');
+export const uploadImg = multer({ storage: storageEngine }).single('image');

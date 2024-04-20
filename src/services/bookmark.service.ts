@@ -1,13 +1,11 @@
-import { client } from "./typesense.service";
+import { getMongoClient } from "./mongo.service";
 import { Bookmarks, bookmarksCollectionName } from "../domain/bookmarks.domain";
 import { Request, Response } from "express";
 
 export const saveBookmarks = async (bookmark: Bookmarks) => {
-    return client.collections(bookmarksCollectionName).documents().import([bookmark], {
-        batch_size: 1,
-        return_doc: true,
-        return_id: true,
-    });
+    return getMongoClient().db("verbi_vault")
+        .collection(bookmarksCollectionName)
+        .insertOne(bookmark);
 }
 
 export const searchBookmarks = async (req: Request, res: Response) => {
@@ -20,6 +18,6 @@ export const searchBookmarks = async (req: Request, res: Response) => {
     }
 
     console.log(`Query`, query)
-    const results = await client.collections(bookmarksCollectionName).documents().search(query);
+    const results = await getMongoClient().db().collection(bookmarksCollectionName).find(query).toArray();
     res.json(results);
 }
